@@ -1,7 +1,7 @@
 import express, { json } from "express";
 import cors from "cors";
 import { config } from "dotenv";
-import { routes } from "./routes"
+import mysql from "mysql2"
 
 config();
 
@@ -17,14 +17,18 @@ app.use(
 );
 app.use(json());
 
-// Routes
-app.use("/usuarios", "/itens", "/pedidos", routes)
+// Connection
+const db = mysql.createConnection({
+  host: process.env.DB_HOST || "picmeat-backend.onrender.com",
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASSWORD || "12345",
+  database: process.env.DB_NAME || "carnes"
+});
 
-// Connection (temporario)
-// connection.connect((err) => {
-//   if (err) throw err;
-//   console.log("Conectado ao banco de dados.");
-// });
+db.connect((err) => {
+  if (err) throw err;
+  console.log("Conectado ao banco de dados.");
+});
 
 //////////////////////////////////////////////////////////////////////////////////
 
