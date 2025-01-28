@@ -19,7 +19,7 @@ app.use(json());
 
 // Connection
 const db = mysql.createConnection({
-  host: process.env.DB_HOST || "picmeat-backend.onrender.com",
+  host: process.env.DB_HOST || "localhost",
   user: process.env.DB_USER || "root",
   password: process.env.DB_PASSWORD || "12345",
   database: process.env.DB_NAME || "carnes"
@@ -156,7 +156,7 @@ app.post("/pedidos", (req, res) => {
 //////////////////////////////////////////////////////////////////////////////////
 
 // Start
-const PORT = process.env.PORT || 3306;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>
   console.log(`Servidor rodando na porta ${PORT}`)
 );
