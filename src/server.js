@@ -1,7 +1,7 @@
 import express, { json } from "express";
 import cors from "cors";
 import { config } from "dotenv";
-import mysql from "mysql2"
+import mysql from "mysql2";
 
 config();
 
@@ -10,7 +10,7 @@ const app = express();
 // Middlewares
 app.use(
   cors({
-    origin: ['https://picmeat-frontend.onrender.com', 'http://localhost:4200'],
+    origin: ["https://picmeat-frontend.onrender.com", "http://localhost:4200"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -19,10 +19,10 @@ app.use(json());
 
 // Connection
 const db = mysql.createConnection({
-  host: process.env.DB_HOST || "localhost",
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASSWORD || "12345",
-  database: process.env.DB_NAME || "carnes"
+  host: process.env.DB_HOST || "picmeat-backend-picmeat-backend.b.aivencloud.com",
+  user: process.env.DB_USER || "avnadmin",
+  password: process.env.DB_PASSWORD || "AVNS_yKqCtKx3mL3aHIFGYQW",
+  database: process.env.DB_NAME || "defaultdb",
 });
 
 db.connect((err) => {
@@ -157,6 +157,4 @@ app.post("/pedidos", (req, res) => {
 
 // Start
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () =>
-  console.log(`Servidor rodando na porta ${PORT}`)
-);
+app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
