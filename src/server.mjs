@@ -19,10 +19,12 @@ app.use(json());
 
 // Connection
 const db = mysql.createConnection({
-  host: process.env.DB_HOST || "picmeat-backend-picmeat-backend.b.aivencloud.com",
-  user: process.env.DB_USER || "avnadmin",
-  password: process.env.DB_PASSWORD || "AVNS_yKqCtKx3mL3aHIFGYQW",
-  database: process.env.DB_NAME || "defaultdb",
+  host: "picmeat-backend-picmeat-backend.b.aivencloud.com",
+  user: "avnadmin",
+  password: "AVNS_yKqCtKx3mL3aHIFGYQW",
+  database: "defaultdb",
+  port: 17716,
+  connectTimeout: 60000,
 });
 
 db.connect((err) => {
@@ -156,5 +158,5 @@ app.post("/pedidos", (req, res) => {
 //////////////////////////////////////////////////////////////////////////////////
 
 // Start
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+const PORT = 17716;
+app.listen(PORT, () => console.log(`Servidor rodando em http://localhost:${PORT}`));
