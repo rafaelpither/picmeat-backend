@@ -24,7 +24,6 @@ const db = mysql.createConnection({
   password: "AVNS_yKqCtKx3mL3aHIFGYQW",
   database: "defaultdb",
   port: 17716,
-  connectTimeout: 60000,
 });
 
 db.connect((err) => {
