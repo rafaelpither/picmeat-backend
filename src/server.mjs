@@ -125,11 +125,7 @@ app.get("/usuarios/:email/:senha", (req, res) => {
     if (!validation){
       return res.status(401).json({})
     };
-      res.status(200).json({
-        nome: usuario.nome,
-        sobrenome: usuario.sobrenome,
-        adm: usuario.adm,
-      });
+      res.status(200).json(results);
   });
 });
 
