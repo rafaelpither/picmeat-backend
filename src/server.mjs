@@ -113,7 +113,7 @@ app.get("/usuarios", (req, res) => {
 app.get("/usuarios/:email/:senha", (req, res) => {
   const { email, senha } = req.params;
   const query =
-    "SELECT nome, sobrenome, adm FROM usuarios WHERE email = ?";
+    "SELECT nome, sobrenome, adm, senha FROM usuarios WHERE email = ?";
   db.query(query, [email], async (err, results) => {
     console.log(results)
     const usuario = results[0];
@@ -123,7 +123,11 @@ app.get("/usuarios/:email/:senha", (req, res) => {
     if (!validation){
       res.status(401).json({})
     } else{
-      res.json(results);
+      res.json({
+        nome: usuario.nome,
+        sobrenome: usuario.sobrenome,
+        adm: usuario.adm,
+      });
     };
   });
 });
