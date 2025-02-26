@@ -115,19 +115,12 @@ app.get("/usuarios/:email/:senha", (req, res) => {
   const query =
     "SELECT nome, sobrenome, adm, senha FROM usuarios WHERE email = ?";
   db.query(query, [email], async (err, results) => {
-    console.log(results)
     const usuario = results[0];
-    console.log(usuario.senha)
-    console.log(senha)
     const validation = await bcrypt.compare(senha, usuario.senha)
     if (!validation){
       res.status(401).json({})
     } else{
-      res.json({
-        nome: usuario.nome,
-        sobrenome: usuario.sobrenome,
-        adm: usuario.adm,
-      });
+      res.json(results);
     };
   });
 });
