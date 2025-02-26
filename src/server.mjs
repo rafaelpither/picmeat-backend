@@ -2,6 +2,7 @@ import express, { json } from "express";
 import cors from "cors";
 import { config } from "dotenv";
 import mysql from "mysql2";
+import bcrypt from "bcrypt";
 
 config();
 
@@ -19,11 +20,11 @@ app.use(json());
 
 // Connection
 const db = mysql.createConnection({
-  host: "picmeat-backend-picmeat-backend.b.aivencloud.com",
-  user: "avnadmin",
-  password: "AVNS_yKqCtKx3mL3aHIFGYQW",
-  database: "defaultdb",
-  port: 17716,
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.PORT,
 });
 
 db.connect((err) => {
@@ -112,21 +113,31 @@ app.get("/usuarios", (req, res) => {
 app.get("/usuarios/:email/:senha", (req, res) => {
   const { email, senha } = req.params;
   const query =
-    "SELECT nome, sobrenome, adm FROM usuarios WHERE email = ? AND senha = ?";
-  db.query(query, [email, senha], (err, results) => {
-    if (err) throw err;
-    res.json(results);
+    "SELECT nome, sobrenome, adm FROM usuarios WHERE email = ?";
+  db.query(query, [email], async (err, results) => {
+    const usuario = results[0];
+    const validation = await bcrypt.compare(senha, usuario.senha)
+    if (!validation){
+      res.status(401).json({})
+    } else{
+      res.json(results);
+    };
   });
 });
 
-app.post("/usuarios", (req, res) => {
+app.post("/usuarios", async (req, res) => {
   const { nome, sobrenome, email, senha, adm } = req.body;
-  const query =
-    "INSERT INTO usuarios (nome, sobrenome, email, senha, adm) values (?, ?, ?, ?, ?)";
-  db.query(query, [nome, sobrenome, email, senha, adm], (err, results) => {
-    if (err) throw err;
-    res.json(results);
-  });
+  try{
+    const hash = await bcrypt.hash(senha, 10);
+    const query = "INSERT INTO usuarios (nome, sobrenome, email, senha, adm) values (?, ?, ?, ?, ?)";
+    db.query(query, [nome, sobrenome, email, hash, adm], (err, results) => {
+      if (err) throw err;
+      res.json(results);
+    });
+  }catch(err){
+    console.log('Erro ao fazer o hasheamento');
+    res.status(500).json({message: 'Internal server error'})
+  }
 });
 
 //////////////////////////////////////////////////////////////////////////////////
