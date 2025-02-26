@@ -2,7 +2,7 @@ import express, { json } from "express";
 import cors from "cors";
 import { config } from "dotenv";
 import mysql from "mysql2";
-import bcrypt, {hash} from "bcrypt";
+import bcrypt, {compareSync, hash} from "bcrypt";
 
 config();
 
@@ -116,6 +116,8 @@ app.get("/usuarios/:email/:senha", (req, res) => {
     "SELECT nome, sobrenome, adm FROM usuarios WHERE email = ?";
   db.query(query, [email], async (err, results) => {
     const usuario = results[0];
+    console.log(usuario.senha)
+    console.log(senha)
     const validation = await bcrypt.compare(senha, usuario.senha)
     if (!validation){
       res.status(401).json({})
