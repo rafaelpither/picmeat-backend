@@ -2,7 +2,7 @@ import express, { json } from "express";
 import cors from "cors";
 import { config } from "dotenv";
 import mysql from "mysql2";
-import bcrypt from "bcrypt";
+import bcrypt, {hash} from "bcrypt";
 
 config();
 
